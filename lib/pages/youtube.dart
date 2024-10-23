@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:huntechelp_admin/pages/player.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 
 class YouTubePage extends StatefulWidget {
+  const YouTubePage({super.key});
+
   @override
   _YouTubePageState createState() => _YouTubePageState();
 }
 
 class _YouTubePageState extends State<YouTubePage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List _videos = [];
   List _filteredVideos = [];
-  String _apiKey = 'AIzaSyCN47LtDXNy5pLIbNcarZqOgF3xtzN2L4w';
-  String _channelId = 'UC8zteQuBHOUz4Ej1iomSgeQ';
+  final String _apiKey = 'AIzaSyCN47LtDXNy5pLIbNcarZqOgF3xtzN2L4w';
+  final String _channelId = 'UC8zteQuBHOUz4Ej1iomSgeQ';
+  String? _selectedVideoId; // To store selected video ID
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref().child('setting');
 
   @override
   void initState() {
     super.initState();
     fetchVideos();
+    fetchSelectedVideoId(); // Fetch the selected video ID when the page loads
     _searchController.addListener(_filterVideos);
   }
 
@@ -33,7 +36,16 @@ class _YouTubePageState extends State<YouTubePage> {
       var data = json.decode(response.body);
       setState(() {
         _videos = data['items'];
-        _filteredVideos = _videos; // Initialize with all videos
+        _filteredVideos = _videos;
+      });
+    }
+  }
+
+  Future<void> fetchSelectedVideoId() async {
+    DataSnapshot snapshot = await _dbRef.child('videoid').get();
+    if (snapshot.exists) {
+      setState(() {
+        _selectedVideoId = snapshot.value as String; // Set the selected video ID from database
       });
     }
   }
@@ -48,16 +60,35 @@ class _YouTubePageState extends State<YouTubePage> {
     });
   }
 
+  void _setVideoOfDay() async {
+    if (_selectedVideoId != null) {
+      await _dbRef.child('videoid').set(_selectedVideoId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Video of the day set successfully!')),
+      );
+    }
+  }
+
+  void _removeVideoOfDay() async {
+    await _dbRef.child('videoid').remove();
+    setState(() {
+      _selectedVideoId = null; // Clear the selected video locally
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Video of the day removed!')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           'Video Tutorials',
           style: TextStyle(color: Colors.black),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Column(
         children: [
@@ -69,7 +100,7 @@ class _YouTubePageState extends State<YouTubePage> {
                 filled: true,
                 fillColor: Colors.grey[200],
                 hintText: 'Search',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none,
@@ -84,80 +115,87 @@ class _YouTubePageState extends State<YouTubePage> {
                 var video = _filteredVideos[index];
                 var videoId = video['id']['videoId'];
                 var videoTitle = video['snippet']['title'];
-                var thumbnailUrl =
-                    video['snippet']['thumbnails']['high']['url'];
-                var channelTitle = video['snippet']['channelTitle'];
+                var thumbnailUrl = video['snippet']['thumbnails']['high']['url'];
+
+                bool isSelected = _selectedVideoId == videoId;
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0), // Added padding
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VideoPlayerPage(
-                            videoId: videoId,
-                            videoTitle: videoTitle,
-                          ),
-                        ),
-                      );
+                      setState(() {
+                        if (_selectedVideoId == videoId) {
+                          _selectedVideoId = null; // Deselect if already selected
+                        } else {
+                          _selectedVideoId = videoId;
+                        }
+                      });
                     },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                thumbnailUrl,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
+                    child: Card(
+                      color: isSelected ? Colors.grey[300] : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              thumbnailUrl,
+                              width: 100,
+                              height: 80,
+                              fit: BoxFit.cover,
                             ),
-                            Positioned(
-                              bottom: 8,
-                              right: 8,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                color: Colors.black.withOpacity(0.8),
-                                child: Text(
-                                  '10:15', // Static duration for now
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              videoTitle,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            videoTitle,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        SizedBox(height: 4),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            channelTitle,
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
               },
+            ),
+          ),
+          if (_selectedVideoId != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: MaterialButton(
+                onPressed: _setVideoOfDay,
+                color: const Color(0xFF51011A),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minWidth: double.infinity,
+                child: const Text(
+                  'Set Video of the Day',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: MaterialButton(
+              onPressed: _removeVideoOfDay,
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              minWidth: double.infinity,
+              child: const Text(
+                'Remove Video of the Day',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ],

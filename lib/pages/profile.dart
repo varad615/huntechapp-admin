@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:huntechelp_admin/pages/loginpage.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -49,11 +51,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile',
+        title: const Text('Profile',
             style: TextStyle(
                 color: Colors.white)), // Set title text color to white
-        backgroundColor: Color(0xFF51011A),
-        iconTheme: IconThemeData(
+        backgroundColor: const Color(0xFF51011A),
+        iconTheme: const IconThemeData(
             color: Colors.white), // Set the back arrow color to white
       ),
       body: Padding(
@@ -64,30 +66,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text(
               'Name: ${_name ?? 'Loading...'}',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF51011A)), // Set name text color to white
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Email: ${_email ?? 'Loading...'}',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 18,
                   color: Color(0xFF51011A)), // Set email text color to white
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton.icon(
               onPressed: _logout,
-              icon: Icon(Icons.logout,
+              icon: const Icon(Icons.logout,
                   color: Colors.white), // Set icon color to white
-              label: Text('Logout',
+              label: const Text('Logout',
                   style: TextStyle(
                       color: Colors.white)), // Set text color to white
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF51011A), // Use your color here
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: TextStyle(fontSize: 18),
+                backgroundColor: const Color(0xFF51011A), // Use your color here
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle: const TextStyle(fontSize: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                       12), // Rounded corners for Material 3

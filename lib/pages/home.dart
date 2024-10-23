@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:huntechelp_admin/pages/available.dart';
 import 'package:huntechelp_admin/pages/chat.dart';
 import 'package:huntechelp_admin/pages/chats.dart';
 import 'package:huntechelp_admin/pages/profile.dart';
+import 'package:huntechelp_admin/pages/updates.dart';
 import 'package:huntechelp_admin/pages/youtube.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -46,14 +50,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF51011A), // Maroon color
+        backgroundColor: const Color(0xFF51011A), // Maroon color
         title: _userName == null
-            ? CircularProgressIndicator(
+            ? const CircularProgressIndicator(
                 color: Colors.white, // Spinner in white to match the theme
               )
             : Text(
                 'Welcome, $_userName', // Welcome message with dynamic name
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white, // White text color
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -69,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20), // Balanced space
+              const SizedBox(height: 20), // Balanced space
 
               // List of options
               Expanded(
@@ -77,8 +81,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     // Option 1: Chat
                     ListTile(
-                      leading: Icon(Icons.chat, color: Color(0xFF51011A)),
-                      title: Text(
+                      leading: const Icon(Icons.chat, color: Color(0xFF51011A)),
+                      title: const Text(
                         'Chats',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                       ),
@@ -89,13 +93,13 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    Divider(), // Divider between items
+                    const Divider(), // Divider between items
 
                     // Option 2: YouTube Video Tutorial
                     ListTile(
-                      leading: Icon(Icons.smart_display, color: Color(0xFF51011A)),
-                      title: Text(
-                        'Video Tutorial',
+                      leading: const Icon(Icons.smart_display, color: Color(0xFF51011A)),
+                      title: const Text(
+                        'Video of the day',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                       ),
                       onTap: () {
@@ -105,13 +109,13 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    Divider(),
+                    const Divider(),
 
                     // Option 3: Account
                     ListTile(
                       leading:
-                          Icon(Icons.account_circle, color: Color(0xFF51011A)),
-                      title: Text(
+                          const Icon(Icons.account_circle, color: Color(0xFF51011A)),
+                      title: const Text(
                         'Account',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                       ),
@@ -122,16 +126,41 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    Divider(),
-
-                    // Option 4: Call
+                    const Divider(),
                     ListTile(
-                      leading: Icon(Icons.call, color: Color(0xFF51011A)),
-                      title: Text(
-                        'Call',
+                      leading:
+                          const Icon(Icons.update, color: Color(0xFF51011A)),
+                      title: const Text(
+                        'Updates',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const UpdatesPage()),
+                        );
+                      },
                     ),
+                    const Divider(),
+                     ListTile(
+                      leading:
+                          const Icon(Icons.av_timer_rounded, color: Color(0xFF51011A)),
+                      title: const Text(
+                        'Availability',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AvailabilitySettingPage()),
+                        );
+                      },
+                    ),
+                    const Divider(),
+                 
+
+                  
+                    
                   ],
                 ),
               ),

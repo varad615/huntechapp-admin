@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:huntechelp_admin/pages/home.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -60,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // Catch any other errors
       print("An unexpected error occurred: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An unexpected error occurred')),
+        const SnackBar(content: Text('An unexpected error occurred')),
       );
     }
   }
@@ -68,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
+      appBar: AppBar(title: const Text('Register')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -92,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your name' : null,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               // Email TextFormField with outline
               TextFormField(
                 decoration: InputDecoration(
@@ -110,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your email' : null,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               // Password TextFormField with outline
               TextFormField(
                 decoration: InputDecoration(
@@ -128,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your password' : null,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Register Button with full width and custom style
               ElevatedButton(
                 onPressed: () {
@@ -136,16 +138,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     _register();
                   }
                 },
-                child: Text('Register'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF3045D3), // Button background color
+                  backgroundColor: const Color(0xFF3045D3), // Button background color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12), // Border radius
                   ),
                   elevation: 0, // Remove shadow
                   shadowColor: Colors.transparent, // No shadow color
-                  minimumSize: Size(double.infinity, 50), // Full width
+                  minimumSize: const Size(double.infinity, 50), // Full width
                 ),
+                child: Text('Register'),
               ),
             ],
           ),

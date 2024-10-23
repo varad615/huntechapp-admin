@@ -11,6 +11,8 @@ void main() async {
 }
 
 class Chat extends StatefulWidget {
+  const Chat({super.key});
+
   @override
   _ChatState createState() => _ChatState();
 }
@@ -129,7 +131,7 @@ class _ChatState extends State<Chat> {
       'available': true,
     }).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Temporary number created with availability')),
+        const SnackBar(content: Text('Temporary number created with availability')),
       );
     });
   }
@@ -138,18 +140,18 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0), // Custom height
+        preferredSize: const Size.fromHeight(60.0), // Custom height
         child: ClipRRect(
-          borderRadius: BorderRadius.vertical(
+          borderRadius: const BorderRadius.vertical(
             bottom: Radius.circular(8.0), // Rounded corners
           ),
           child: AppBar(
-            backgroundColor: Color(0xFF51011A), // Maroon color
-            title: Text(
+            backgroundColor: const Color(0xFF51011A), // Maroon color
+            title: const Text(
               'Chat',
               style: TextStyle(color: Colors.white), // White text color
             ),
-            iconTheme: IconThemeData(color: Colors.white), // White back button
+            iconTheme: const IconThemeData(color: Colors.white), // White back button
             actions: [
               // Padding(
               //   padding: const EdgeInsets.only(right: 16.0),
@@ -169,7 +171,7 @@ class _ChatState extends State<Chat> {
                     icon: Icon(
                       Icons.call,
                       color: _isCallEnabled
-                          ? Color(0xFF51011A)
+                          ? const Color(0xFF51011A)
                           : Colors.grey, // Show gray when disabled
                     ),
                     onPressed: _isCallEnabled
@@ -179,7 +181,7 @@ class _ChatState extends State<Chat> {
                         : () {
                             // Show snackbar when the button is disabled
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text('User is not available. Call after some time.'),
                               ),
                             );
@@ -206,8 +208,8 @@ class _ChatState extends State<Chat> {
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    padding: EdgeInsets.all(10),
+                    margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color:
                           isUserMessage ? Colors.green[300] : Colors.grey[300],
@@ -220,12 +222,12 @@ class _ChatState extends State<Chat> {
                       children: [
                         Text(
                           message['text'],
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
                           _formatTimestamp(message['time']),
-                          style: TextStyle(color: Colors.black54, fontSize: 10),
+                          style: const TextStyle(color: Colors.black54, fontSize: 10),
                         ),
                       ],
                     ),
@@ -237,7 +239,7 @@ class _ChatState extends State<Chat> {
           Padding(
             padding: const EdgeInsets.all(0),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xFF51011A), // Background color for the entire row
                 borderRadius: BorderRadius.vertical(
                     top: Radius.circular(8.0)), // Rounded top corners
@@ -246,7 +248,7 @@ class _ChatState extends State<Chat> {
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           top: 10,
                           bottom: 8,
                           left: 10), // Add top and bottom margin
@@ -264,17 +266,17 @@ class _ChatState extends State<Chat> {
                             borderSide: BorderSide.none,
                           ),
                           hintText: 'Enter message',
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                               horizontal: 10,
                               vertical: 10), // Add horizontal padding
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   IconButton(
-                    icon: Icon(Icons.send, color: Colors.white), // Send icon
+                    icon: const Icon(Icons.send, color: Colors.white), // Send icon
                     onPressed: () {
                       _sendMessage(_controller.text);
                     },

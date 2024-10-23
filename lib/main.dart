@@ -11,6 +11,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = createTextTheme(context, "ABeeZee", "ABeeZee");
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Health App',
       theme: theme.light(), // Always use the light theme
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }

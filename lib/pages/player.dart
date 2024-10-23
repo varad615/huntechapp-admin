@@ -7,7 +7,7 @@ class VideoPlayerPage extends StatefulWidget {
   final String videoId;
   final String videoTitle;
 
-  VideoPlayerPage({required this.videoId, required this.videoTitle});
+  const VideoPlayerPage({super.key, required this.videoId, required this.videoTitle});
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
@@ -24,7 +24,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
-      flags: YoutubePlayerFlags(
+      flags: const YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
       ),
@@ -86,13 +86,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 // Video title
                 Text(
                   widget.videoTitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 // Channel title
                 Text(
                   _channelTitle,
@@ -101,7 +101,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     color: Colors.grey[600],
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 // Video description
                 Text(
                   _description,
@@ -114,7 +114,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             ),
           ),
           // Divider
-          Divider(),
+          const Divider(),
           // Action buttons
           // Padding(
           //   padding: const EdgeInsets.all(16.0),
